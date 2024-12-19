@@ -1,6 +1,6 @@
-streamlit
-pandas
-matplotlib
-seaborn
-yfinance
-datetime
+streamlit=1.41.1
+pandas=2.0.3
+matplotlib=3.7.2
+seaborn=0.12.2
+yfinance=0.2.50
+datetime=2.8.2
