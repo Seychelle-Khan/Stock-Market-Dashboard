@@ -22,9 +22,10 @@ st.title("Stock Market Trends Dashboard")
 st.sidebar.header("Filters")
 
 st.header("Ticker Legend")
-acronyms = ['KOS','HL','ALTM','AG','RIG','LAC']
+acronyms = ['KOS','HL','ALTM','AG','RIG','LAC','AAPL','MSFT','JNJ','MP']
 names = ['Kosmos Energy Limited','Hecla Mining Company','Arcadium Lithium plc',
-         'First Majestic Silver Corp.','Transocean Ltd.','Lithium Americas Corp.']
+         'First Majestic Silver Corp.','Transocean Ltd.','Lithium Americas Corp.', 
+         'Apple Inc.', 'Microsoft Corporation','Johnson & Johnson','MP Materials Corp.']
 tickers = pd.DataFrame({'Ticker':acronyms,'Company':names})
 st.table(tickers)
 
@@ -35,7 +36,11 @@ st.table(tickers)
 #First Majestic Silver Corp. AG
 #Transocean Ltd. RIG
 #Lithium Americas Corp. LAC
-data = yf.download("KOS HL ALTM AG RIG LAC", 
+#Apple Inc. AAPL
+#Microsoft Corporation MSFT
+#Johnson & Johnson JNJ
+#MP Materials Corp. MP
+data = yf.download("KOS HL ALTM AG RIG LAC AAPL MSFT JNJ MP", 
                    start=year_first_day, 
                    end=today_date, 
                    group_by="Ticker")
@@ -70,7 +75,29 @@ data_lac.reset_index(inplace=True)
 data_lac['Date'] = pd.to_datetime(data_lac['Date'])
 data_lac['Ticker'] = 'LAC'
 
-dfs = [data_kos,data_hl,data_altm,data_ag,data_rig,data_lac]
+data_aapl = data['AAPL']
+data_aapl.reset_index(inplace=True)
+data_aapl['Date'] = pd.to_datetime(data_aapl['Date'])
+data_aapl['Ticker'] = 'AAPL'
+
+data_msft = data['MSFT']
+data_msft.reset_index(inplace=True)
+data_msft['Date'] = pd.to_datetime(data_msft['Date'])
+data_msft['Ticker'] = 'MSFT'
+
+data_jnj = data['JNJ']
+data_jnj.reset_index(inplace=True)
+data_jnj['Date'] = pd.to_datetime(data_jnj['Date'])
+data_jnj['Ticker'] = 'JNJ'
+
+data_mp = data['MP']
+data_mp.reset_index(inplace=True)
+data_mp['Date'] = pd.to_datetime(data_mp['Date'])
+data_mp['Ticker'] = 'MP'
+
+
+dfs = [data_kos,data_hl,data_altm,data_ag,data_rig,data_lac,data_aapl,
+       data_msft,data_jnj,data_mp]
 data_all = pd.concat(dfs)
 data_all['Average'] = data_all.loc[:, ["High","Low"]].mean(axis = 1)
 
@@ -131,10 +158,3 @@ plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
 plt.show()
 st.pyplot(fig)
-
-# st.subheader("Open Price over Time")
-# open_prices_over_time = data_all[['Date','Ticker','Open']]
-# fig, ax = plt.subplots()
-# open_prices_over_time.plot(kind="line", ax=ax)
-# ax.set_ylabel("Open Price")
-# st.pyplot(fig)
