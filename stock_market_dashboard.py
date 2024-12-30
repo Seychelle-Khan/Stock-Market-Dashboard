@@ -118,7 +118,7 @@ data_display = data_display.drop(columns=['Difference in Average','Average_x']).
 #data_display = data_display[['Date', 'Ticker', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', 'Average', '% Change in Average Price']]
 data_display = data_display.sort_values(by='Date', ascending=False)
 st.header("Stock Market Trends Overview")
-st.subheader('Last 7 days')
+st.subheader('Today's Prices')
 st.table(data_display.head(7))
 
 #Filters
