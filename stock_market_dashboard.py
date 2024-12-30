@@ -128,6 +128,7 @@ end_date = st.sidebar.date_input("End Date", data_all["Date"].max())
 
 if Ticker_filter:
     data_all = data_all[data_all["Ticker"].isin(Ticker_filter)]
+    data_display = data_display[data_display["Ticker"].isin(Ticker_filter)]
 if start_date:
     start_date = pd.to_datetime(start_date)
     data_all = data_all[data_all["Date"]>start_date]
