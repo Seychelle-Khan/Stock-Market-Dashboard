@@ -119,7 +119,7 @@ data_display = data_display.drop(columns=['Difference in Average','Average_x']).
 data_display = data_display.sort_values(by='Date', ascending=False)
 st.header("Stock Market Trends Overview")
 st.subheader('Last 7 days')
-st.table(data_display.head(7)
+st.table(data_display.head(7))
 
 #Filters
 Ticker_filter = st.sidebar.multiselect("Ticker", options=data_all["Ticker"].unique())
