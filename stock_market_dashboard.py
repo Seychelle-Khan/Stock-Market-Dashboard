@@ -115,7 +115,7 @@ data_display = data_all.merge(data_avg,how='inner',on=['Date','Ticker'])
 data_display = data_display.drop(columns=['Difference in Average','Average_x']).rename(columns={'Average_y':'Average'})
 
 #Re-order dataframe for display on dashboard
-data_display = data_display[['Date', 'Ticker', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', 'Average', '% Change in Average Price']]
+#data_display = data_display[['Date', 'Ticker', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', 'Average', '% Change in Average Price']]
 data_display = data_display.sort_values(by='Date', ascending=False)
 st.table(data_display)
 
