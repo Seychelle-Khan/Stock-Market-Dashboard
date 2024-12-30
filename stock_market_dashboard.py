@@ -135,8 +135,8 @@ if end_date:
 
 #Display table on dashboard
 st.header("Stock Market Trends Overview")
-st.subheader("Today's Prices")
-st.table(data_display[data_display["Date"]==pd.to_datetime(today_date)])
+st.subheader("Latest Prices")
+st.table(data_display.head(10))
 
 
 
