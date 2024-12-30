@@ -17,17 +17,22 @@ from datetime import date
 today_date = datetime.today().strftime('%Y-%m-%d')
 year_first_day = date(date.today().year, 1, 1)
 
-#streamlit dashboard base features
-st.title("Stock Market Trends Dashboard")
+#streamlit dashboard base features + Page Configurations
+#st.title("Stock Market Trends Dashboard")
+st.set_page_config(
+    page_title="Stock Market Trends Dashboard",
+    layout="wide",
+    initial_sidebar_state="expanded")
 st.sidebar.header("Filters")
 
-st.header("Ticker Legend")
+col1, col2 = st.columns([1, 3])
+
+#Create ticker table for sidebar legend
 acronyms = ['KOS','HL','ALTM','AG','RIG','LAC','AAPL','MSFT','JNJ','MP']
 names = ['Kosmos Energy Limited','Hecla Mining Company','Arcadium Lithium plc',
          'First Majestic Silver Corp.','Transocean Ltd.','Lithium Americas Corp.', 
          'Apple Inc.', 'Microsoft Corporation','Johnson & Johnson','MP Materials Corp.']
 tickers = pd.DataFrame({'Ticker':acronyms,'Company':names})
-st.table(tickers)
 
 #DATA TRANSFORMATION
 #Kosmos Energy Limited KOS
@@ -101,15 +106,20 @@ dfs = [data_kos,data_hl,data_altm,data_ag,data_rig,data_lac,data_aapl,
 data_all = pd.concat(dfs)
 data_all['Average'] = data_all.loc[:, ["High","Low"]].mean(axis = 1)
 
+#Latest Prices
+data_latest = data_all.sort_values(by="Date", ascending=False)
+data_latest = data_latest[['Date', 'Ticker','Average']]
+data_latest = data_latest.head(len(acronyms))
 
 
-#Filters
+#Sidebar Filters
 Ticker_filter = st.sidebar.multiselect("Ticker", options=data_all["Ticker"].unique())
 start_date = st.sidebar.date_input("Start Date", data_all["Date"].min())
 end_date = st.sidebar.date_input("End Date", data_all["Date"].max())
 
 if Ticker_filter:
     data_all = data_all[data_all["Ticker"].isin(Ticker_filter)]
+    data_latest = data_latest[data_latest["Ticker"].isin(Ticker_filter)]
 if start_date:
     start_date = pd.to_datetime(start_date)
     data_all = data_all[data_all["Date"]>start_date]
@@ -117,10 +127,19 @@ if end_date:
     end_date = pd.to_datetime(end_date)
     data_all = data_all[data_all["Date"]<end_date]
 
+#Sidebar Ticker legend
+st.sidebar.header("Ticker Legend")
+st.sidebar.table(tickers)
 
+#COLUMN 1
+#Insert table that would need to be filtered
+col1.header("Latest Average Prices")
+col1.table(data_latest)
+
+#COLUMN 2
 #Dashboard charts
-st.header("Stock Market Trend Overview")
-st.subheader("Open Price over Time")
+col2.header("Stock Market Trend Overview")
+col2.subheader("Open Price over Time")
 open_prices_over_time = data_all[["Date","Ticker","Open"]]
 fig=plt.figure(figsize=(10, 6))
 sns.lineplot(x='Date', y='Open', data=open_prices_over_time, hue='Ticker')
@@ -128,9 +147,9 @@ plt.ylabel("Open Price")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
 plt.show()
-st.pyplot(fig)
+col2.pyplot(fig)
 
-st.subheader("Close Price over Time")
+col2.subheader("Close Price over Time")
 close_prices_over_time = data_all[["Date","Ticker","Close"]]
 fig=plt.figure(figsize=(10, 6))
 sns.lineplot(x='Date', y='Close', data=close_prices_over_time, hue='Ticker')
@@ -138,9 +157,9 @@ plt.ylabel("Close Price")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
 plt.show()
-st.pyplot(fig)
+col2.pyplot(fig)
 
-st.subheader("Average Price over Time")
+col2.subheader("Average Price over Time")
 avg_prices_over_time = data_all[["Date","Ticker","Average"]]
 fig=plt.figure(figsize=(10, 6))
 sns.lineplot(x='Date', y='Average', data=avg_prices_over_time, hue='Ticker')
@@ -148,9 +167,9 @@ plt.ylabel("Average Price")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
 plt.show()
-st.pyplot(fig)
+col2.pyplot(fig)
 
-st.subheader("Volume over Time")
+col2.subheader("Volume over Time")
 vol_over_time = data_all[["Date","Ticker","Volume"]]
 fig=plt.figure(figsize=(10, 6))
 sns.lineplot(x='Date', y='Volume', data=vol_over_time, hue='Ticker')
@@ -158,4 +177,4 @@ plt.ylabel("Volume")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
 plt.show()
-st.pyplot(fig)
+col2.pyplot(fig)
