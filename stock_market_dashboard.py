@@ -102,6 +102,21 @@ data_all = pd.concat(dfs)
 data_all['Average'] = data_all.loc[:, ["High","Low"]].mean(axis = 1)
 
 
+#Organizing table for display
+data_avg = data_all[['Date','Ticker','Average']]
+data_avg['Difference in Average'] = data_avg.groupby('Ticker')['Average'].diff()
+data_avg['% Change in Average Price'] = data_avg.groupby('Ticker')['Average'].pct_change()
+data_avg['% Change in Average Price'] = data_avg['% Change in Average Price']*100
+data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].round(decimals=2)
+data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].astype(str) + '%'
+data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].str.replace('nan%', 'nan')
+
+data_display = data_all.merge(data_avg,how='inner',on=['Date','Ticker'])
+data_display = data_display.drop(columns=['Difference in Average','Average_x']).rename(columns={'Average_y':'Average'})
+
+data_display = data_display.sort_values(by='Date', ascending=False)
+
+
 #Filters
 Ticker_filter = st.sidebar.multiselect("Ticker", options=data_all["Ticker"].unique())
 start_date = st.sidebar.date_input("Start Date", data_all["Date"].min())
@@ -118,22 +133,7 @@ if end_date:
     data_all = data_all[data_all["Date"]<end_date]
 
 
-
-#Organizing table for display
-data_avg = data_all[['Date','Ticker','Average']]
-data_avg['Difference in Average'] = data_avg.groupby('Ticker')['Average'].diff()
-data_avg['% Change in Average Price'] = data_avg.groupby('Ticker')['Average'].pct_change()
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price']*100
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].round(decimals=2)
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].astype(str) + '%'
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].str.replace('nan%', 'nan')
-
-data_display = data_all.merge(data_avg,how='inner',on=['Date','Ticker'])
-data_display = data_display.drop(columns=['Difference in Average','Average_x']).rename(columns={'Average_y':'Average'})
-
-#Re-order dataframe for display on dashboard
-#data_display = data_display[['Date', 'Ticker', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', 'Average', '% Change in Average Price']]
-data_display = data_display.sort_values(by='Date', ascending=False)
+#Display table on dashboard
 st.header("Stock Market Trends Overview")
 st.subheader("Today's Prices")
 st.table(data_display.head(7))
