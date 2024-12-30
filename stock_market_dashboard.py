@@ -102,20 +102,6 @@ data_all = pd.concat(dfs)
 data_all['Average'] = data_all.loc[:, ["High","Low"]].mean(axis = 1)
 
 
-#Organizing table for display
-data_avg = data_all[['Date','Ticker','Average']]
-data_avg['Difference in Average'] = data_avg.groupby('Ticker')['Average'].diff()
-data_avg['% Change in Average Price'] = data_avg.groupby('Ticker')['Average'].pct_change()
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price']*100
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].round(decimals=2)
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].astype(str) + '%'
-data_avg['% Change in Average Price'] = data_avg['% Change in Average Price'].str.replace('nan%', 'nan')
-
-data_display = data_all.merge(data_avg,how='inner',on=['Date','Ticker'])
-data_display = data_display.drop(columns=['Difference in Average','Average_x']).rename(columns={'Average_y':'Average'})
-
-data_display = data_display.sort_values(by='Date', ascending=False)
-
 
 #Filters
 Ticker_filter = st.sidebar.multiselect("Ticker", options=data_all["Ticker"].unique())
@@ -124,7 +110,6 @@ end_date = st.sidebar.date_input("End Date", data_all["Date"].max())
 
 if Ticker_filter:
     data_all = data_all[data_all["Ticker"].isin(Ticker_filter)]
-    data_display = data_display[data_display["Ticker"].isin(Ticker_filter)]
 if start_date:
     start_date = pd.to_datetime(start_date)
     data_all = data_all[data_all["Date"]>start_date]
@@ -133,14 +118,8 @@ if end_date:
     data_all = data_all[data_all["Date"]<end_date]
 
 
-#Display table on dashboard
-st.header("Stock Market Trends Overview")
-st.subheader("Latest Prices")
-st.table(data_display.head(10))
-
-
-
 #Dashboard charts
+st.header("Stock Market Trend Overview")
 st.subheader("Open Price over Time")
 open_prices_over_time = data_all[["Date","Ticker","Open"]]
 fig=plt.figure(figsize=(10, 6))
