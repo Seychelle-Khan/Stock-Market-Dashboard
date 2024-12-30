@@ -102,6 +102,23 @@ data_all = pd.concat(dfs)
 data_all['Average'] = data_all.loc[:, ["High","Low"]].mean(axis = 1)
 
 
+#Filters
+Ticker_filter = st.sidebar.multiselect("Ticker", options=data_all["Ticker"].unique())
+start_date = st.sidebar.date_input("Start Date", data_all["Date"].min())
+end_date = st.sidebar.date_input("End Date", data_all["Date"].max())
+
+if Ticker_filter:
+    data_all = data_all[data_all["Ticker"].isin(Ticker_filter)]
+    data_display = data_display[data_display["Ticker"].isin(Ticker_filter)]
+if start_date:
+    start_date = pd.to_datetime(start_date)
+    data_all = data_all[data_all["Date"]>start_date]
+if end_date:
+    end_date = pd.to_datetime(end_date)
+    data_all = data_all[data_all["Date"]<end_date]
+
+
+
 #Organizing table for display
 data_avg = data_all[['Date','Ticker','Average']]
 data_avg['Difference in Average'] = data_avg.groupby('Ticker')['Average'].diff()
@@ -121,20 +138,7 @@ st.header("Stock Market Trends Overview")
 st.subheader("Today's Prices")
 st.table(data_display.head(7))
 
-#Filters
-Ticker_filter = st.sidebar.multiselect("Ticker", options=data_all["Ticker"].unique())
-start_date = st.sidebar.date_input("Start Date", data_all["Date"].min())
-end_date = st.sidebar.date_input("End Date", data_all["Date"].max())
 
-if Ticker_filter:
-    data_all = data_all[data_all["Ticker"].isin(Ticker_filter)]
-    data_display = data_display[data_display["Ticker"].isin(Ticker_filter)]
-if start_date:
-    start_date = pd.to_datetime(start_date)
-    data_all = data_all[data_all["Date"]>start_date]
-if end_date:
-    end_date = pd.to_datetime(end_date)
-    data_all = data_all[data_all["Date"]<end_date]
 
 #Dashboard charts
 st.subheader("Open Price over Time")
