@@ -136,7 +136,7 @@ if end_date:
 #Display table on dashboard
 st.header("Stock Market Trends Overview")
 st.subheader("Latest Prices")
-st.table(data_display.head(10).reset_index(drop=True))
+st.table(data_display.head(10).reset_index(drop=True, inplace=True))
 
 
 
