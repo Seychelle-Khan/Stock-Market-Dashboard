@@ -110,6 +110,7 @@ data_all['Average'] = data_all.loc[:, ["High","Low"]].mean(axis = 1)
 data_latest = data_all.sort_values(by="Date", ascending=False)
 data_latest = data_latest[['Date', 'Ticker','Average']]
 data_latest = data_latest.head(len(acronyms))
+data_latest['Date'] = data_latest['Date'].astype(str)
 
 
 #Sidebar Filters
