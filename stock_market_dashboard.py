@@ -117,7 +117,9 @@ data_display = data_display.drop(columns=['Difference in Average','Average_x']).
 #Re-order dataframe for display on dashboard
 #data_display = data_display[['Date', 'Ticker', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', 'Average', '% Change in Average Price']]
 data_display = data_display.sort_values(by='Date', ascending=False)
-st.table(data_display)
+st.header("Stock Market Trends Overview")
+st.subheader('Last 7 days')
+st.table(data_display.head(7)
 
 #Filters
 Ticker_filter = st.sidebar.multiselect("Ticker", options=data_all["Ticker"].unique())
@@ -134,8 +136,6 @@ if end_date:
     data_all = data_all[data_all["Date"]<end_date]
 
 #Dashboard charts
-st.header("Stock Market Trends Overview")
-
 st.subheader("Open Price over Time")
 open_prices_over_time = data_all[["Date","Ticker","Open"]]
 fig=plt.figure(figsize=(10, 6))
