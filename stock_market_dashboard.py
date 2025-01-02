@@ -14,8 +14,10 @@ from datetime import datetime
 from datetime import date
 
 #Current date
-today_date = datetime.today().strftime('%Y-%m-%d')
-year_first_day = date(date.today().year, 1, 1)
+today_date = datetime.today()#.strftime('%Y-%m-%d')
+#year_first_day = date(date.today().year, 1, 1)
+previous_year = datetime.today().year -1
+today_last_year = today_date.replace(year = previous_year)
 
 #streamlit dashboard base features + Page Configurations
 #st.title("Stock Market Trends Dashboard")
@@ -46,7 +48,7 @@ tickers = pd.DataFrame({'Ticker':acronyms,'Company':names})
 #Johnson & Johnson JNJ
 #MP Materials Corp. MP
 data = yf.download("KOS HL ALTM AG RIG LAC AAPL MSFT JNJ MP", 
-                   start=year_first_day, 
+                   start=today_last_year, 
                    end=today_date, 
                    group_by="Ticker")
 
