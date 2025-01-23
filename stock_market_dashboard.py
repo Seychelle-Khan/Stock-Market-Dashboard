@@ -49,7 +49,9 @@ def get_stock_data(ticker):
 
 def get_chart_title(ticker):
     candlestick_chart_title="Candlestick Chart for "+ticker
-    return candlestick_chart_title
+    close_price_chart_title="Close Prices over time for "+ticker
+    titles = [candlestick_chart_title,close_price_chart_title]
+    return titles
     
 
 # data = yf.download("MSFT", 
@@ -67,7 +69,7 @@ company = tickers['Company'].loc[tickers['Ticker']==ticker].iloc[0]
 #Getting stock data
 if ticker:
         data = get_stock_data(ticker)
-        candlestick_chart_title = get_chart_title(ticker)
+        titles = get_chart_title(ticker)
 
 #Sidebar filters
 start_date = st.sidebar.date_input("Start Date", data["Date pulled"].min())
@@ -98,7 +100,17 @@ with col4:
 with col5:
     st.download_button("Download Stock Data for "+company, data.to_csv(index=True), file_name=f"{ticker}_stock_data.csv", mime="text/csv")
 
-#Chart
+#Charts
 st.subheader("Prices over Time")
-fig2, ax = mpf.plot(data,type="candle",title=candlestick_chart_title,ylabel="Price", style="mike",volume=True,figratio=(6,3),figscale=0.5,returnfig=True)
-st.pyplot(fig2,use_container_width=True)
+fig, ax = mpf.plot(data,type="candle",title=titles[0],ylabel="Price", volume=True,style="yahoo",figratio=(6,3),figscale=0.5,returnfig=True)
+st.pyplot(fig,use_container_width=True)
+
+st.subheader("Close Prices over Time")
+close_prices_over_time = data[["Date pulled","Close"]]
+fig2=plt.figure(figsize=(10, 6))
+sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time)
+plt.ylabel("Close Price")
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.xticks(rotation=90)
+plt.show()
+st.pyplot(fig2)
