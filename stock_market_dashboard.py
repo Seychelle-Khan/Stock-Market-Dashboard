@@ -101,13 +101,14 @@ with col5:
     st.download_button("Download Stock Data for "+company, data.to_csv(index=True), file_name=f"{ticker}_stock_data.csv", mime="text/csv")
 
 #Charts
-st.subheader("Prices over Time")
-fig, ax = mpf.plot(data,type="candle",title=titles[0],ylabel="Price", volume=True,style="yahoo",figratio=(6,3),figscale=0.5,returnfig=True)
+st.subheader(titles[0])
+fig, ax = mpf.plot(data,type="candle",ylabel="Price", volume=True,style="yahoo",figratio=(6,3),figscale=0.5,returnfig=True)
 st.pyplot(fig,use_container_width=True)
 
+st.subheader(titles[1])
 close_prices_over_time = data[["Date pulled","Close"]]
 fig2=plt.figure(figsize=(10, 6))
-sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time).set(title=titles[1])
+sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time)
 plt.ylabel("Close Price")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
