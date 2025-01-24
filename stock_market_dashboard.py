@@ -105,10 +105,9 @@ st.subheader("Prices over Time")
 fig, ax = mpf.plot(data,type="candle",title=titles[0],ylabel="Price", volume=True,style="yahoo",figratio=(6,3),figscale=0.5,returnfig=True)
 st.pyplot(fig,use_container_width=True)
 
-st.subheader("Close Prices over Time")
 close_prices_over_time = data[["Date pulled","Close"]]
 fig2=plt.figure(figsize=(10, 6))
-sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time)
+sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time, title='Close Prices for '+ticker)
 plt.ylabel("Close Price")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
