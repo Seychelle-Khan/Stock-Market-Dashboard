@@ -50,7 +50,8 @@ def get_stock_data(ticker):
 def get_chart_title(ticker):
     candlestick_chart_title="Candlestick Chart for "+ticker
     close_price_chart_title="Close Prices for "+ticker
-    titles = [candlestick_chart_title,close_price_chart_title]
+    page_header="Stock Market Dashboard for "+ticker
+    titles = [candlestick_chart_title,close_price_chart_title,page_header]
     return titles
     
 
@@ -86,7 +87,8 @@ if end_date:
 st.sidebar.header("Ticker Legend")
 st.sidebar.table(tickers)
 
-
+#Header
+st.header(titles[2])
 #Cards
 col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
