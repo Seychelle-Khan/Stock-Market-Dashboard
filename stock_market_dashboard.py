@@ -102,7 +102,7 @@ with col5:
 
 #Charts
 st.subheader(titles[0])
-fig, ax = mpf.plot(data,type="candle",ylabel="Price",style="yahoo",figratio=(6,3),figscale=0.5,returnfig=True)
+fig, ax = mpf.plot(data,type="candle",ylabel="Price",style="yahoo",figsize=(11,8),figscale=0.5,returnfig=True,volume=True,panel_rations=(2,1))
 st.pyplot(fig,use_container_width=True)
 
 st.subheader(titles[1])
