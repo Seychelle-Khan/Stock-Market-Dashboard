@@ -29,10 +29,10 @@ st.set_page_config(
 st.sidebar.header("Filters")
 
 #Tickers
-acronyms = ['KOS','HL','ALTM','AG','RIG','LAC','AAPL','MSFT','JNJ','MP']
+acronyms = ['KOS','HL','ALTM','AG','RIG','LAC','AAPL','MSFT','JNJ','MP','NOVA']
 names = ['Kosmos Energy Limited','Hecla Mining Company','Arcadium Lithium plc',
          'First Majestic Silver Corp.','Transocean Ltd.','Lithium Americas Corp.', 
-         'Apple Inc.', 'Microsoft Corporation','Johnson & Johnson','MP Materials Corp.']
+         'Apple Inc.', 'Microsoft Corporation','Johnson & Johnson','MP Materials Corp.','Sunnova Energy International Inc.']
 tickers = pd.DataFrame({'Ticker':acronyms,'Company':names})
 
 #Pull stock data
