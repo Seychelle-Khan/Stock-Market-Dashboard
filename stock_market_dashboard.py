@@ -109,6 +109,7 @@ st.subheader(titles[1])
 close_prices_over_time = data[["Date pulled","Close"]]
 fig2=plt.figure(figsize=(10, 6))
 sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time)
+plt.xlabel("Date")
 plt.ylabel("Close Price")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
