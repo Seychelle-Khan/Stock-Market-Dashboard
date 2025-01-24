@@ -49,7 +49,7 @@ def get_stock_data(ticker):
 
 def get_chart_title(ticker):
     candlestick_chart_title="Candlestick Chart for "+ticker
-    close_price_chart_title="Close Prices over time for "+ticker
+    close_price_chart_title="Close Prices for "+ticker
     titles = [candlestick_chart_title,close_price_chart_title]
     return titles
     
@@ -107,7 +107,7 @@ st.pyplot(fig,use_container_width=True)
 
 close_prices_over_time = data[["Date pulled","Close"]]
 fig2=plt.figure(figsize=(10, 6))
-sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time, title='Close Prices for '+ticker)
+sns.lineplot(x='Date pulled', y='Close', data=close_prices_over_time, title=titles[1])
 plt.ylabel("Close Price")
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xticks(rotation=90)
